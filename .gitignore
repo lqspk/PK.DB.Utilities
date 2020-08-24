@@ -10,3 +10,7 @@
 /PK.DB.Utilities.Test/Core/Compression
 /.vs/PK.DB.Utilities/v16
 /PK.DB.Utilities/bin/Debug
+/.vs
+/PK.DB.Utilities/bin/Release
+/PK.DB.Utilities.Test/bin/Release
+/PK.DB.Utilities.Test/obj/Release

@@ -7,7 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="License.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="MongoDB.Driver" Version="2.11.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Include="License.txt" />
   </ItemGroup>
 
 </Project>
