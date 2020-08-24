@@ -3,3 +3,9 @@
 ################################################################################
 
 /packages
+/PK.DB.Utilities/bin/Debug/netstandard2.0
+/PK.DB.Utilities/obj
+/PK.DB.Utilities.Test/bin/Debug
+/PK.DB.Utilities.Test/obj/Debug
+/PK.DB.Utilities.Test/Core/Compression
+/.vs/PK.DB.Utilities/v16
