@@ -11,6 +11,9 @@ namespace PK.DB.Utilities.Interfaces
     /// </summary>
     public interface IMongoDbEntity
     {
-        [BsonId] string Id { get; set; }
+        /// <summary>
+        /// 用于绑定MongoDb文档的_id字段
+        /// </summary>
+        string BsonId { get; set; }
     }
 }

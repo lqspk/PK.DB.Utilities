@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Linq;
 using PK.DB.Utilities.Helpers;
 using PK.DB.Utilities.Interfaces;
+using PK.DB.Utilities.Test.Models;
 using System;
 using System.Linq;
 
@@ -23,7 +24,7 @@ namespace PK.DB.Utilities.Test
             {
                 User user = new User()
                 {
-                    Id = Guid.NewGuid().ToString("N"),
+                    BsonId = Guid.NewGuid().ToString("N"),
                     CreateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)
                 };
 
@@ -43,7 +44,7 @@ namespace PK.DB.Utilities.Test
         {
             try
             {
-                User user = dbHelper.FindOne<User>(s => s.Id == "e16a022f658c4037a3cc5cfbc7c296d5");
+                User user = dbHelper.FindOne<User>(s => s.BsonId == "e16a022f658c4037a3cc5cfbc7c296d5");
                 user.CreateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                 dbHelper.ReplaceOne(user);
 
@@ -61,7 +62,7 @@ namespace PK.DB.Utilities.Test
         {
             try
             {
-                var query = dbHelper.Find<User>(s => s.Id == "e16a022f658c4037a3cc5cfbc7c296d5");
+                var query = dbHelper.Find<User>(s => s.BsonId == "e16a022f658c4037a3cc5cfbc7c296d5");
 
                 query = query.Where(s => s.CreateTime < DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
 
@@ -82,7 +83,7 @@ namespace PK.DB.Utilities.Test
             try
             {
                 var result = dbHelper.DeleteMany<User>(s =>
-                    new string[] {"e16a022f658c4037a3cc5cfbc7c296d5"}.Contains(s.Id));
+                    new string[] {"e16a022f658c4037a3cc5cfbc7c296d5"}.Contains(s.BsonId));
 
                 Console.WriteLine(result.DeletedCount);
             }
@@ -92,12 +93,5 @@ namespace PK.DB.Utilities.Test
             }
 
         }
-    }
-
-    public class User : IMongoDbEntity
-    {
-        public string Id { get; set; }
-
-        public DateTime CreateTime { get; set; }
     }
 }

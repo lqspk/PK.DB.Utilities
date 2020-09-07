@@ -4,6 +4,11 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Authors>PK</Authors>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Copyright>PK</Copyright>
+    <Description>PK.DB.Utilities</Description>
+    <Version>1.0.1</Version>
+    <RepositoryUrl>https://github.com/lqspk/PK.DB.Utilities</RepositoryUrl>
+    <PackageReleaseNotes>数据库通用操作类</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

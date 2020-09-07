@@ -7,13 +7,11 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace PK.DB.Utilities.Helpers
-{
+namespace PK.DB.Utilities.Helpers {
     /// <summary>
     /// MongoDb帮助类
     /// </summary>
-    public class MongoDbHelper
-    {
+    public class MongoDbHelper {
         /// <summary>
         /// 数据库服务器地址
         /// </summary>
@@ -32,8 +30,7 @@ namespace PK.DB.Utilities.Helpers
         /// <summary>
         /// 获取数据库连接
         /// </summary>
-        public IMongoDatabase Database
-        {
+        public IMongoDatabase Database {
             get => this._db;
         }
 
@@ -41,8 +38,7 @@ namespace PK.DB.Utilities.Helpers
         /// 构造函数
         /// </summary>
         /// <param name="url">带数据库名的MongoDb连接地址</param>
-        public MongoDbHelper(MongoUrl url)
-        {
+        public MongoDbHelper(MongoUrl url) {
             this._databaseName = url.DatabaseName;
 
             if (string.IsNullOrWhiteSpace(this._databaseName))
@@ -57,8 +53,7 @@ namespace PK.DB.Utilities.Helpers
         /// </summary>
         /// <param name="server">数据库服务器地址</param>
         /// <param name="databaseName">数据库名称</param>
-        public MongoDbHelper(string server, string databaseName)
-        {
+        public MongoDbHelper(string server, string databaseName) {
             this._server = server;
             this._databaseName = databaseName;
 
@@ -75,55 +70,46 @@ namespace PK.DB.Utilities.Helpers
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns> 
-        public void Insert<T>(T entity) where T: IMongoDbEntity
-        {
-            if (entity == null)
-            {
+        public void Insert<TDocument>(TDocument entity) where TDocument : IMongoDbEntity {
+            if (entity == null) {
                 throw new Exception("entity is null.");
             }
 
-            if (string.IsNullOrEmpty(entity.Id))
-            {
-                throw new Exception("Id is null or empty.");
+            if (string.IsNullOrEmpty(entity.BsonId)) {
+                throw new Exception("BsonId is null or empty.");
             }
 
-            this._db.GetCollection<T>(entity.GetType().Name).InsertOne(entity);
+            this._db.GetCollection<TDocument>(entity.GetType().Name).InsertOne(entity);
         }
 
         /// <summary>
         /// 异步新增一个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task InsertAsync<T>(T entity) where T : IMongoDbEntity
-        {
-            if (entity == null)
-            {
+        public async Task InsertAsync<TDocument>(TDocument entity) where TDocument : IMongoDbEntity {
+            if (entity == null) {
                 throw new Exception("entity is null.");
             }
 
-            if (string.IsNullOrEmpty(entity.Id))
-            {
-                throw new Exception("Id is null or empty.");
+            if (string.IsNullOrEmpty(entity.BsonId)) {
+                throw new Exception("BsonId is null or empty.");
             }
 
-            await this._db.GetCollection<T>(entity.GetType().Name).InsertOneAsync(entity);
+            await this._db.GetCollection<TDocument>(entity.GetType().Name).InsertOneAsync(entity);
         }
 
         /// <summary>
         /// 批量新增文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="entities"></param>
-        public void InsertMany<T>(IList<T> entities) where T : IMongoDbEntity
-        {
-            if (entities != null)
-            {
+        public void InsertMany<TDocument>(IList<TDocument> entities) where TDocument : IMongoDbEntity {
+            if (entities != null) {
                 var entity = entities.FirstOrDefault();
-                if (entity != null)
-                {
-                    this._db.GetCollection<T>(entity.GetType().Name).InsertMany(entities);
+                if (entity != null) {
+                    this._db.GetCollection<TDocument>(entity.GetType().Name).InsertMany(entities);
                 }
             }
         }
@@ -131,16 +117,13 @@ namespace PK.DB.Utilities.Helpers
         /// <summary>
         /// 异步批量新增文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="entities"></param>
-        public async Task InsertManyAsync<T>(IList<T> entities) where T : IMongoDbEntity
-        {
-            if (entities != null)
-            {
+        public async Task InsertManyAsync<TDocument>(IList<TDocument> entities) where TDocument : IMongoDbEntity {
+            if (entities != null) {
                 var entity = entities.FirstOrDefault();
-                if (entity != null)
-                {
-                    await this._db.GetCollection<T>(entity.GetType().Name).InsertManyAsync(entities);
+                if (entity != null) {
+                    await this._db.GetCollection<TDocument>(entity.GetType().Name).InsertManyAsync(entities);
                 }
             }
         }
@@ -148,191 +131,170 @@ namespace PK.DB.Utilities.Helpers
         /// <summary>
         /// 替换单个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="entity"></param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public ReplaceOneResult ReplaceOne<T>(T entity, ReplaceOptions options = null) where T : IMongoDbEntity
-        {
-            if (entity == null)
-            {
+        public ReplaceOneResult ReplaceOne<TDocument>(TDocument entity, ReplaceOptions options = null) where TDocument : IMongoDbEntity {
+            if (entity == null) {
                 throw new Exception("entity is null.");
             }
 
-            if (string.IsNullOrEmpty(entity.Id))
-            {
-                throw new Exception("Id is null or empty.");
+            if (string.IsNullOrEmpty(entity.BsonId)) {
+                throw new Exception("BsonId is null or empty.");
             }
 
-            return this._db.GetCollection<T>(entity.GetType().Name)
-                .ReplaceOne(s => s.Id == entity.Id, entity, options);
+            return this._db.GetCollection<TDocument>(entity.GetType().Name)
+                .ReplaceOne(s => s.BsonId == entity.BsonId, entity, options);
         }
 
         /// <summary>
         /// 异步替换单个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<ReplaceOneResult> ReplaceOneAsync<T>(T entity, ReplaceOptions options = null) where T : IMongoDbEntity
-        {
-            if (entity == null)
-            {
+        public async Task<ReplaceOneResult> ReplaceOneAsync<TDocument>(TDocument entity, ReplaceOptions options = null) where TDocument : IMongoDbEntity {
+            if (entity == null) {
                 throw new Exception("entity is null.");
             }
 
-            if (string.IsNullOrEmpty(entity.Id))
-            {
-                throw new Exception("Id is null or empty.");
+            if (string.IsNullOrEmpty(entity.BsonId)) {
+                throw new Exception("BsonId is null or empty.");
             }
-            
-            return await this._db.GetCollection<T>(entity.GetType().Name)
-                .ReplaceOneAsync(s => s.Id == entity.Id, entity, options);
+
+            return await this._db.GetCollection<TDocument>(entity.GetType().Name)
+                .ReplaceOneAsync(s => s.BsonId == entity.BsonId, entity, options);
         }
 
         /// <summary>
         /// 删除单个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public DeleteResult DeleteOne<T>(T entity) where T : IMongoDbEntity
-        {
-            if (entity == null)
-            {
+        public DeleteResult DeleteOne<TDocument>(TDocument entity) where TDocument : IMongoDbEntity {
+            if (entity == null) {
                 throw new Exception("entity is null.");
             }
 
-            if (string.IsNullOrEmpty(entity.Id))
-            {
-                throw new Exception("Id is null or empty.");
+            if (string.IsNullOrEmpty(entity.BsonId)) {
+                throw new Exception("BsonId is null or empty.");
             }
 
-            return this._db.GetCollection<T>(entity.GetType().Name)
-                .DeleteOne(s => s.Id == entity.Id);
+            return this._db.GetCollection<TDocument>(entity.GetType().Name)
+                .DeleteOne(s => s.BsonId == entity.BsonId);
         }
 
         /// <summary>
         /// 异步删除单个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<DeleteResult> DeleteOneAsync<T>(T entity) where T : IMongoDbEntity
-        {
-            if (entity == null)
-            {
+        public async Task<DeleteResult> DeleteOneAsync<TDocument>(TDocument entity) where TDocument : IMongoDbEntity {
+            if (entity == null) {
                 throw new Exception("entity is null.");
             }
 
-            if (string.IsNullOrEmpty(entity.Id))
-            {
-                throw new Exception("Id is null or empty.");
+            if (string.IsNullOrEmpty(entity.BsonId)) {
+                throw new Exception("BsonId is null or empty.");
             }
 
-            return await this._db.GetCollection<T>(entity.GetType().Name)
-                .DeleteOneAsync(s => s.Id == entity.Id);
+            return await this._db.GetCollection<TDocument>(entity.GetType().Name)
+                .DeleteOneAsync(s => s.BsonId == entity.BsonId);
         }
-        
+
         /// <summary>
         /// 删除多个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public DeleteResult DeleteMany<T>(Expression<Func<T, bool>> expression) where T : IMongoDbEntity
-        {
-            if (expression == null)
-            {
-                throw new Exception("expression is null.");
+        public DeleteResult DeleteMany<TDocument>(Expression<Func<TDocument, bool>> whereExpression) where TDocument : IMongoDbEntity {
+            if (whereExpression == null) {
+                throw new Exception("whereExpression is null.");
             }
 
-            return this._db.GetCollection<T>(typeof(T).Name)
-                .DeleteMany(expression);
+            return this._db.GetCollection<TDocument>(typeof(TDocument).Name)
+                .DeleteMany(whereExpression);
         }
 
         /// <summary>
         /// 异步删除多个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public async Task<DeleteResult> DeleteManyAsync<T>(Expression<Func<T, bool>> expression) where T : IMongoDbEntity
-        {
-            if (expression == null)
-            {
+        public async Task<DeleteResult> DeleteManyAsync<TDocument>(Expression<Func<TDocument, bool>> whereExpression) where TDocument : IMongoDbEntity {
+            if (whereExpression == null) {
                 throw new Exception("expression is null.");
             }
 
-            return await this._db.GetCollection<T>(typeof(T).Name)
-                .DeleteManyAsync(expression);
+            return await this._db.GetCollection<TDocument>(typeof(TDocument).Name)
+                .DeleteManyAsync(whereExpression);
         }
 
         /// <summary>
         /// 查找单个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public T FindOne<T>(Expression<Func<T, bool>> expression) where T : IMongoDbEntity
-        {
-            return IAsyncCursorSourceExtensions.FirstOrDefault(this._db.GetCollection<T>(typeof(T).Name)
+        public TDocument FindOne<TDocument>(Expression<Func<TDocument, bool>> whereExpression) where TDocument : IMongoDbEntity {
+            return IAsyncCursorSourceExtensions.FirstOrDefault(this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                     .AsQueryable()
-                    .Where<T>(expression));
+                    .Where<TDocument>(whereExpression));
         }
 
         /// <summary>
         /// 异步查找单个文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public async Task<T> FindOneAsync<T>(Expression<Func<T, bool>> expression) where T : IMongoDbEntity
-        {
-            return await this._db.GetCollection<T>(typeof(T).Name)
+        public async Task<TDocument> FindOneAsync<TDocument>(Expression<Func<TDocument, bool>> whereExpression) where TDocument : IMongoDbEntity {
+            return await this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .AsQueryable()
-                .Where<T>(expression)
+                .Where<TDocument>(whereExpression)
                 .FirstOrDefaultAsync();
         }
 
         /// <summary>
         /// 查找文档
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public IMongoQueryable<T> Find<T>(Expression<Func<T, bool>> expression) where T : IMongoDbEntity
-        {
-            return this._db.GetCollection<T>(typeof(T).Name)
+        public IMongoQueryable<TDocument> Find<TDocument>(Expression<Func<TDocument, bool>> whereExpression) where TDocument : IMongoDbEntity {
+            return this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .AsQueryable()
-                .Where<T>(expression);
+                .Where<TDocument>(whereExpression);
         }
 
         /// <summary>
         /// 查找文档列表
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public IList<T> FindList<T>(Expression<Func<T, bool>> expression) where T : IMongoDbEntity
-        {
-            return this._db.GetCollection<T>(typeof(T).Name)
+        public IList<TDocument> FindList<TDocument>(Expression<Func<TDocument, bool>> whereExpression) where TDocument : IMongoDbEntity {
+            return this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .AsQueryable()
-                .Where<T>(expression)
+                .Where<TDocument>(whereExpression)
                 .ToList();
         }
 
         /// <summary>
         /// 异步查找文档列表
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public async Task<IList<T>> FindListAsync<T>(Expression<Func<T, bool>> expression) where T : IMongoDbEntity
-        {
-            return await this._db.GetCollection<T>(typeof(T).Name)
+        public async Task<IList<TDocument>> FindListAsync<TDocument>(Expression<Func<TDocument, bool>> expression) where TDocument : IMongoDbEntity {
+            return await this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .AsQueryable()
-                .Where<T>(expression)
+                .Where<TDocument>(expression)
                 .ToListAsync();
         }
     }
