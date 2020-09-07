@@ -1,8 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using PK.DB.Utilities.Helpers;
-using PK.DB.Utilities.Interfaces;
+using PK.DB.Utilities.MongoDb;
 using PK.DB.Utilities.Test.Models;
 using System;
 using System.Linq;
@@ -15,7 +14,7 @@ namespace PK.DB.Utilities.Test
     [TestClass]
     public class UnitTestMongoDB
     {
-        private static MongoDbHelper dbHelper = new MongoDbHelper("mongodb://localhost:27017/", "Demo");
+        private static MongoDbHelper dbHelper = new MongoDbHelper(new MongoUrl("mongodb://localhost:27017/Demo"));
 
         [TestMethod]
         public void TestInsert()

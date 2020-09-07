@@ -1,13 +1,12 @@
 ﻿using MongoDB.Driver;
 using MongoDB.Driver.Linq;
-using PK.DB.Utilities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace PK.DB.Utilities.Helpers {
+namespace PK.DB.Utilities.MongoDb {
     /// <summary>
     /// MongoDb帮助类
     /// </summary>

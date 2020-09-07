@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-
-namespace PK.DB.Utilities.Interfaces
-{
+﻿namespace PK.DB.Utilities.MongoDb {
     /// <summary>
     /// MongoDb实体类接口
     /// </summary>
