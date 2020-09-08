@@ -6,16 +6,18 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Copyright>PK</Copyright>
     <Description>数据库通用操作类</Description>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <RepositoryUrl>https://github.com/lqspk/PK.DB.Utilities</RepositoryUrl>
     <PackageReleaseNotes>数据库通用操作类</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseFile>README.md</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>https://github.com/lqspk/PK.DB.Utilities</PackageProjectUrl>
+    <Company />
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="License.txt" />
-    <None Include="..\README.md">
+    <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>

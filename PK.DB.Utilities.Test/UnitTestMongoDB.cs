@@ -23,7 +23,7 @@ namespace PK.DB.Utilities.Test
             {
                 User user = new User()
                 {
-                    BsonId = Guid.NewGuid().ToString("N"),
+                    //BsonId = Guid.NewGuid().ToString("N"),
                     CreateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)
                 };
 

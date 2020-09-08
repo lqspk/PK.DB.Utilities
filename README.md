@@ -1,14 +1,16 @@
-# PK.DB.Utilities
+﻿# PK.DB.Utilities
 C# 通用数据库操作类
 
 MongoDb数据库操作示例：
 
 1.定义一个实体类：
 
-    public class User : MongoDbEntity {
-        public override string BsonId { get; set; }
+    public class User : IMongoDbEntity {
+        [BsonId]
+        public string BsonId { get; set; }
 
-        public DateTime CreateTime { get; set; }        
+        public DateTime CreateTime { get; set; }
+        
     }
 
 
@@ -17,7 +19,7 @@ MongoDb数据库操作示例：
     MongoDbHelper dbHelper = new MongoDbHelper(new MongoUrl("mongodb://localhost:27017/Demo"));
 
 
-3.插入文档：
+3.插入一个文档：
 
     User user = new User()
     {
