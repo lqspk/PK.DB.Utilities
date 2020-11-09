@@ -8,6 +8,10 @@ namespace PK.DB.Utilities.Test.Models {
         public string BsonId { get; set; }
 
         public DateTime CreateTime { get; set; }
-        
+
+        public string Name { get; set; }
+
+        public int? Status { get; set; }
+
     }
 }
