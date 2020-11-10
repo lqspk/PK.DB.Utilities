@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace PK.DB.Utilities.MongoDb
 {
     /// <summary>
-    /// 更新模型
+    /// 更新字段类
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class UpdateModel<T>
+    public class UpdateField<T>
     {
         /// <summary>
         /// 字段

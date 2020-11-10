@@ -41,16 +41,20 @@ namespace PK.DB.Utilities.Test
             }
         }
 
+        delegate object updateAction (Func<User, Object> field, object value);
+
         [TestMethod]
         public void TestUpdateOne()
         {
+            
+
             try
             {
                 User user = dbHelper.FindOne<User>(s => s.BsonId == "650805e8f9704abf955006da63eaa12b");
                 var result = dbHelper.UpdateOne<User>(s => s.BsonId == user.BsonId, new []
                 {
-                    new UpdateModel<User>(){ Field = s => s.CreateTime, Value = DateTime.UtcNow },
-                    new UpdateModel<User>(){ Field = s => s.Name, Value = "李四" },
+                    new UpdateField<User>(){ Field = s => s.CreateTime, Value = DateTime.UtcNow },
+                    new UpdateField<User>(){ Field = s => s.Name, Value = "李四" },
                 });
 
                 Console.WriteLine("true");
@@ -68,7 +72,7 @@ namespace PK.DB.Utilities.Test
             {
                 var result = dbHelper.UpdateMany<User>(s => !s.Status.HasValue, new[]
                 {
-                    new UpdateModel<User>(){ Field = s => s.Status, Value = 1 }
+                    new UpdateField<User>(){ Field = s => s.Status, Value = 1 }
                 });
 
                 Console.WriteLine("true");

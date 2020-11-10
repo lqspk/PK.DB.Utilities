@@ -290,10 +290,10 @@ namespace PK.DB.Utilities.MongoDb {
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public async Task<IList<TDocument>> FindListAsync<TDocument>(Expression<Func<TDocument, bool>> expression) where TDocument : IMongoDbEntity {
+        public async Task<IList<TDocument>> FindListAsync<TDocument>(Expression<Func<TDocument, bool>> whereExpression) where TDocument : IMongoDbEntity {
             return await this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .AsQueryable()
-                .Where<TDocument>(expression)
+                .Where<TDocument>(whereExpression)
                 .ToListAsync();
         }
 
@@ -302,24 +302,24 @@ namespace PK.DB.Utilities.MongoDb {
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="whereExpression">查询条件</param>
-        /// <param name="updates">更新字段和值</param>
+        /// <param name="updateFields">更新的字段和值</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public UpdateResult UpdateOne<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateModel<TDocument>[] updates, UpdateOptions options = null) where TDocument : IMongoDbEntity
+        public UpdateResult UpdateOne<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateField<TDocument>[] updateFields, UpdateOptions options = null) where TDocument : IMongoDbEntity
         {
             if (whereExpression == null)
             {
                 throw new Exception("whereExpression is null.");
             }
 
-            if (updates == null)
+            if (updateFields == null || !updateFields.Any())
             {
-                throw new Exception("updates is null.");
+                throw new Exception("updateFields is null.");
             }
 
             var updateDefinitionBuilder = Builders<TDocument>.Update;
             var updateDefinitions =
-                updates.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
+                updateFields.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
 
             return this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .UpdateOne(whereExpression, updateDefinitionBuilder.Combine(updateDefinitions), options);
@@ -330,24 +330,24 @@ namespace PK.DB.Utilities.MongoDb {
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="whereExpression">查询条件</param>
-        /// <param name="updates">更新字段和值</param>
+        /// <param name="updateFields">更新字段和值</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async Task<UpdateResult> UpdateOneAsync<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateModel<TDocument>[] updates, UpdateOptions options = null) where TDocument : IMongoDbEntity
+        public async Task<UpdateResult> UpdateOneAsync<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateField<TDocument>[] updateFields, UpdateOptions options = null) where TDocument : IMongoDbEntity
         {
             if (whereExpression == null)
             {
                 throw new Exception("whereExpression is null.");
             }
 
-            if (updates == null || !updates.Any())
+            if (updateFields == null || !updateFields.Any())
             {
-                throw new Exception("updates is null.");
+                throw new Exception("updateFields is null.");
             }
 
             var updateDefinitionBuilder = Builders<TDocument>.Update;
             var updateDefinitions =
-                updates.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
+                updateFields.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
 
             return await this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .UpdateOneAsync(whereExpression, updateDefinitionBuilder.Combine(updateDefinitions), options);
@@ -358,24 +358,24 @@ namespace PK.DB.Utilities.MongoDb {
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="whereExpression">查询条件</param>
-        /// <param name="updates">更新字段和值</param>
+        /// <param name="updateFields">更新字段和值</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public UpdateResult UpdateMany<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateModel<TDocument>[] updates, UpdateOptions options = null) where TDocument : IMongoDbEntity
+        public UpdateResult UpdateMany<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateField<TDocument>[] updateFields, UpdateOptions options = null) where TDocument : IMongoDbEntity
         {
             if (whereExpression == null)
             {
                 throw new Exception("whereExpression is null.");
             }
 
-            if (updates == null)
+            if (updateFields == null || !updateFields.Any())
             {
-                throw new Exception("updates is null.");
+                throw new Exception("updateFields is null.");
             }
 
             var updateDefinitionBuilder = Builders<TDocument>.Update;
             var updateDefinitions =
-                updates.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
+                updateFields.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
 
             return this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .UpdateMany(whereExpression, updateDefinitionBuilder.Combine(updateDefinitions), options);
@@ -386,24 +386,24 @@ namespace PK.DB.Utilities.MongoDb {
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
         /// <param name="whereExpression">查询条件</param>
-        /// <param name="updates">更新字段和值</param>
+        /// <param name="updateFields">更新字段和值</param>
         /// <param name="options"></param>
         /// <returns></returns>
-        public async Task<UpdateResult> UpdateManyAsync<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateModel<TDocument>[] updates, UpdateOptions options = null) where TDocument : IMongoDbEntity
+        public async Task<UpdateResult> UpdateManyAsync<TDocument>(Expression<Func<TDocument, bool>> whereExpression, UpdateField<TDocument>[] updateFields, UpdateOptions options = null) where TDocument : IMongoDbEntity
         {
             if (whereExpression == null)
             {
                 throw new Exception("whereExpression is null.");
             }
 
-            if (updates == null)
+            if (updateFields == null || !updateFields.Any())
             {
-                throw new Exception("updates is null.");
+                throw new Exception("updateFields is null.");
             }
 
             var updateDefinitionBuilder = Builders<TDocument>.Update;
             var updateDefinitions =
-                updates.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
+                updateFields.Select(s => updateDefinitionBuilder.Set(s.Field, s.Value)).ToList();
 
             return await this._db.GetCollection<TDocument>(typeof(TDocument).Name)
                 .UpdateManyAsync(whereExpression, updateDefinitionBuilder.Combine(updateDefinitions), options);
