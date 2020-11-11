@@ -28,3 +28,15 @@ MongoDb数据库操作示例：
     };
 
     dbHelper.Insert(user);
+    
+4.更新一个文档：
+
+    dbHelper.UpdateOne<User>(s => s.BsonId == "XXXXXXXXXXX", new []
+    {
+        new UpdateField<User>(){ Field = s => s.CreateTime, Value = DateTime.UtcNow },
+        new UpdateField<User>(){ Field = s => s.Name, Value = "Li" },
+    });  
+    
+5.删除多个文档：
+
+    dbHelper.DeleteMany<User>(s => s.BsonId == "XXXXXXXXXXX");  
