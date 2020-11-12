@@ -46,8 +46,6 @@ namespace PK.DB.Utilities.Test
         [TestMethod]
         public void TestUpdateOne()
         {
-            
-
             try
             {
                 User user = dbHelper.FindOne<User>(s => s.BsonId == "650805e8f9704abf955006da63eaa12b");
@@ -88,7 +86,7 @@ namespace PK.DB.Utilities.Test
         {
             try
             {
-                User user = dbHelper.FindOne<User>(s => s.BsonId == "e16a022f658c4037a3cc5cfbc7c296d5");
+                User user = dbHelper.GetCollection<User>().AsQueryable().FirstOrDefault();
                 user.CreateTime = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc);
                 dbHelper.ReplaceOne(user);
 
@@ -98,6 +96,22 @@ namespace PK.DB.Utilities.Test
             {
                 Console.WriteLine(e);
             }
+        }
+
+        [TestMethod]
+        public void TestFindOne()
+        {
+            try
+            {
+                var query = dbHelper.FindOne<User>(s => s.BsonId == "650805e8f9704abf955006da63eaa12b");
+
+                Console.WriteLine(query);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
         }
 
         [TestMethod]
