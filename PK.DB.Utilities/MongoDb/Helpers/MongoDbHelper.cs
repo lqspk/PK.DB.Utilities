@@ -71,6 +71,21 @@ namespace PK.DB.Utilities.MongoDb
         }
 
         /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="settings">设置参数</param>
+        public MongoDbHelper(MongoClientSettings settings)
+        {
+            if (settings == null)
+                throw new Exception("settings is null.");
+
+            var client = new MongoClient(settings);
+
+            this._db = client.GetDatabase(this._databaseName);
+        }
+
+
+        /// <summary>
         /// 获取IMongoCollection
         /// </summary>
         /// <typeparam name="TDocument"></typeparam>
