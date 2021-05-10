@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using MongoDB.Bson;
 
 namespace PK.DB.Utilities.Test
@@ -32,6 +33,15 @@ namespace PK.DB.Utilities.Test
                 };
 
                 dbHelper.Insert(user);
+
+                UserExt userExt = new UserExt()
+                {
+                    BsonId = Guid.NewGuid().ToString("N"),
+                    UserId = user.BsonId,
+                    IDCode = "123"
+                };
+
+                dbHelper.Insert(userExt);
 
                 Console.WriteLine("true");
             }
@@ -124,6 +134,28 @@ namespace PK.DB.Utilities.Test
                 query = query.Where(s => s.CreateTime < DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
 
                 var list = query.ToList();
+
+                Console.WriteLine(list.Count.ToString());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
+        [TestMethod]
+        public async Task TestFindJoin()
+        {
+            try
+            {
+                var query = dbHelper.GetCollection<User>().AsQueryable().Where(s => s.Name == null)
+                    .Join(dbHelper.GetCollection<UserExt>().AsQueryable(), a => a.BsonId, b=> b.UserId, (a, b) => new { a, b })
+                    ;
+
+                query = query.Where(s => s.a.CreateTime < DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc));
+
+                var list = await query.Select(s => s.a.BsonId).ToListAsync();
 
                 Console.WriteLine(list.Count.ToString());
             }
